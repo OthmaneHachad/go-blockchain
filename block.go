@@ -12,11 +12,17 @@ type Block struct {
 	Timestamp 		int64
 	PrevBlockHash 	[]byte
 	Hash 			[]byte
+	Nonce			int
 }
 
 func NewBlock(data string, prevBlockHash []byte) *Block {
-	newBlock := &Block{[]byte(data), time.Now().Unix(), prevBlockHash, []byte{}}
-	newBlock.SetHash()
+	newBlock := &Block{[]byte(data), time.Now().Unix(), prevBlockHash, []byte{}, 0}
+	pow := NewProofOfWork(newBlock)
+	nonce, hash := pow.Run()
+
+	newBlock.Hash = hash
+	newBlock.Nonce = nonce
+
 	return newBlock
 }
 

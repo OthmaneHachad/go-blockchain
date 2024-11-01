@@ -1,7 +1,10 @@
 package main
 
-
-import "fmt"
+import (
+	"encoding/binary"
+	"fmt"
+	"strconv"
+)
 
 
 
@@ -15,6 +18,15 @@ func main() {
 		fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
+		pow := NewProofOfWork(block)
+		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate(block)))
+		fmt.Println()
 		fmt.Println()
 	}
+}
+
+func IntToHex(num int64) []byte {
+    buff := make([]byte, 8) // Create a buffer of 8 bytes (since int64 is 8 bytes)
+    binary.BigEndian.PutUint64(buff, uint64(num))
+    return buff
 }
