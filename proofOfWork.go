@@ -72,7 +72,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 }
 
 
-func (pow *ProofOfWork) Validate(block *Block) bool {
+func (pow *ProofOfWork) Validate() bool {
 	var hashInt big.Int
 
 	data := pow.prepareDataToHashing(pow.block.Nonce)

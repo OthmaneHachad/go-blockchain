@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/boltdb/bolt"
 )
 
@@ -14,8 +16,9 @@ const blocksBucket = "blocks"
 
 func (blockchain *Blockchain) AddBlock(data string) {
 	var lastHash []byte 
+	var err error
 
-	err := blockchain.db.View(func (tx *bolt.Tx) error {
+	err = blockchain.db.View(func (tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(blocksBucket))
 
 		lastHash = bucket.Get([]byte("l"))
@@ -47,6 +50,10 @@ func (blockchain *Blockchain) AddBlock(data string) {
 		blockchain.tip = newBlock.Hash
 		return nil
 	})
+
+	if err != nil {
+		panic(fmt.Sprintf("Error updating internal DB: %s", err))
+	}
 }
 
 func CreateGenesisBlock() *Block {
@@ -111,8 +118,9 @@ type BlockchainIterator struct {
 func (iter *BlockchainIterator) Next() *Block {
 	var block *Block
 	var SerializationErr error
+	var err error
 
-	err := iter.db.View(func (tx *bolt.Tx) error {
+	err = iter.db.View(func (tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(blocksBucket))
 		encodedBlock := bucket.Get(iter.currentHash)
 		block, SerializationErr = DeserializeBlock(encodedBlock)
@@ -124,6 +132,10 @@ func (iter *BlockchainIterator) Next() *Block {
 		return nil
 
 	})
+
+	if (err != nil) {
+		return nil
+	}
 
 	iter.currentHash = block.PrevBlockHash
 	return block

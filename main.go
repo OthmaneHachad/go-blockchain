@@ -2,19 +2,21 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
 )
 
 
 
 func main() {
 	bc, err := NewBlockchain()
-	if (err != nil) {
-		panic(err)
+	if err != nil {
+		panic(fmt.Sprintf("Error when creating blockchain: %s", err))
 	}
+	
+	defer bc.db.Close()
 
-	bc.AddBlock("Send 1 BTC to Ivan")
-	bc.AddBlock("Send 2 more BTC to Ivan")
-
+	cli := CLI{bc}
+	cli.Run()
 }
 
 func IntToHex(num int64) []byte {
