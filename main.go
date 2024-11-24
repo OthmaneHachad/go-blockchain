@@ -8,7 +8,7 @@ import (
 
 
 func main() {
-	bc, err := NewBlockchain()
+	bc, err := CreateBlockchain("put arbitrary address here!!")
 	if err != nil {
 		panic(fmt.Sprintf("Error when creating blockchain: %s", err))
 	}
