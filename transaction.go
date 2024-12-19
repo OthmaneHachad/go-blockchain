@@ -38,6 +38,13 @@ func (out *TXOutput) CanBeUnlockedWith(unlockingData string) bool {
 	return out.ScriptPublicKey == unlockingData // will be improved later on after implementing addresses
 }
 
+
+// IsCoinbase checks whether the transaction is coinbase
+func (tx Transaction) IsCoinbase() bool {
+	return len(tx.ValueIn) == 1 && len(tx.ValueIn[0].TxId) == 0 && tx.ValueIn[0].ValueOut == -1
+}
+
+
 // SetID sets ID of a transaction
 func (tx *Transaction) SetID() {
 	var encoded bytes.Buffer

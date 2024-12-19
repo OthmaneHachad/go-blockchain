@@ -2,20 +2,12 @@ package main
 
 import (
 	"encoding/binary"
-	"fmt"
 )
 
 
 
 func main() {
-	bc, err := CreateBlockchain("put arbitrary address here!!")
-	if err != nil {
-		panic(fmt.Sprintf("Error when creating blockchain: %s", err))
-	}
-	
-	defer bc.db.Close()
-
-	cli := CLI{bc}
+	cli := CLI{}
 	cli.Run()
 }
 

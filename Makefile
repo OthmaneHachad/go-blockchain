@@ -16,4 +16,18 @@ addblock: build
 printchain: build
 	$(BUILD_DIR)/$(BINARY_NAME) printchain
 
-.PHONY: build run addblock printchain
+createblockchain: build
+	if [ -z "$(ADDRESS)" ]; then echo "Usage: make createblockchain ADDRESS='your address'"; exit 1; fi
+	$(BUILD_DIR)/$(BINARY_NAME) createblockchain -address "$(ADDRESS)"
+
+getbalance: build
+	if [ -z "$(ADDRESS)" ]; then echo "Usage: make getbalance ADDRESS='your address'"; exit 1; fi
+	$(BUILD_DIR)/$(BINARY_NAME) getbalance -address "$(ADDRESS)"
+
+send: build
+	if [ -z "$(FROM)" ] || [ -z "$(TO)" ] || [ -z "$(AMOUNT)" ]; then \
+		echo "Usage: make send FROM='source address' TO='destination address' AMOUNT='amount to send'"; exit 1; \
+	fi
+	$(BUILD_DIR)/$(BINARY_NAME) send -from "$(FROM)" -to "$(TO)" -amount "$(AMOUNT)"
+
+.PHONY: build run addblock printchain createblockchain getbalance send
